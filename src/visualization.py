@@ -116,6 +116,7 @@ def plot_point_cloud_projections(
 
     plt.show()
 
+
 def plot_floor_segmentation_projections(
     floor_points: np.ndarray,
     non_floor_points: np.ndarray,
@@ -136,9 +137,7 @@ def plot_floor_segmentation_projections(
         raise ValueError(f"Expected floor_points with shape (N, 3), got {floor_points.shape}")
 
     if non_floor_points.ndim != 2 or non_floor_points.shape[1] != 3:
-        raise ValueError(
-            f"Expected non_floor_points with shape (N, 3), got {non_floor_points.shape}"
-        )
+        raise ValueError(f"Expected non_floor_points with shape (N, 3), got {non_floor_points.shape}")
 
     def sample_points(points: np.ndarray, max_points: int) -> np.ndarray:
         if points.shape[0] > max_points:

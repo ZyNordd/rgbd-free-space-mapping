@@ -41,8 +41,7 @@ class NYU2KaggleDataset:
 
         if not self.csv_path.exists():
             raise FileNotFoundError(
-                f"CSV file not found: {self.csv_path}. "
-                f"Expected file: data/raw/nyu2_{self.split}.csv"
+                f"CSV file not found: {self.csv_path}. " f"Expected file: data/raw/nyu2_{self.split}.csv"
             )
 
         self.samples = self._read_csv(self.csv_path)
@@ -62,8 +61,7 @@ class NYU2KaggleDataset:
 
         if df.shape[1] < 2:
             raise ValueError(
-                f"CSV file must contain at least 2 columns: rgb_path, depth_path. "
-                f"Got shape: {df.shape}"
+                f"CSV file must contain at least 2 columns: rgb_path, depth_path. " f"Got shape: {df.shape}"
             )
 
         samples: List[Tuple[Path, Path]] = []
@@ -97,7 +95,7 @@ class NYU2KaggleDataset:
         normalized = path_from_csv.replace("\\", "/")
 
         if normalized.startswith("data/"):
-            normalized = normalized[len("data/"):]
+            normalized = normalized[len("data/") :]
 
         return self.data_root / normalized
 

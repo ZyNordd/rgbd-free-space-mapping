@@ -45,9 +45,7 @@ def create_point_cloud_from_rgbd(
         raise ValueError(f"Expected depth map with shape (H, W), got {depth_m.shape}")
 
     if rgb.shape[:2] != depth_m.shape:
-        raise ValueError(
-            f"RGB and depth shapes do not match: rgb={rgb.shape}, depth={depth_m.shape}"
-        )
+        raise ValueError(f"RGB and depth shapes do not match: rgb={rgb.shape}, depth={depth_m.shape}")
 
     if downsample_step < 1:
         raise ValueError("downsample_step must be >= 1")

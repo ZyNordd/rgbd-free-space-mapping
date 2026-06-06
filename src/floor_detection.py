@@ -192,10 +192,7 @@ def detect_floor_plane_ransac(
     if len(candidates) == 0:
         return None
 
-    floor_like_candidates = [
-        candidate for candidate in candidates
-        if candidate.normal_y_abs >= min_normal_y_abs
-    ]
+    floor_like_candidates = [candidate for candidate in candidates if candidate.normal_y_abs >= min_normal_y_abs]
 
     if len(floor_like_candidates) == 0:
         return None

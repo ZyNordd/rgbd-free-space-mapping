@@ -3,47 +3,23 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.config import (
-    DATA_RAW_DIR,
-    FIGURES_DIR,
-    OCCUPANCY_MAPS_DIR,
-    METRICS_DIR,
-    DEPTH_SCALE,
-    MIN_DEPTH_M,
-    MAX_DEPTH_M,
-    FX,
-    FY,
-    CX,
-    CY,
-    DOWNSAMPLE_STEP,
-    GRID_RESOLUTION_M,
-    MIN_OBSTACLE_HEIGHT_M,
-    MAX_OBSTACLE_HEIGHT_M,
-    ROBOT_RADIUS_M,
-)
+from src.config import (CX, CY, DATA_RAW_DIR, DEPTH_SCALE, DOWNSAMPLE_STEP,
+                        FIGURES_DIR, FX, FY, GRID_RESOLUTION_M, MAX_DEPTH_M,
+                        MAX_OBSTACLE_HEIGHT_M, METRICS_DIR, MIN_DEPTH_M,
+                        MIN_OBSTACLE_HEIGHT_M, OCCUPANCY_MAPS_DIR,
+                        ROBOT_RADIUS_M)
 from src.data_loading import NYU2KaggleDataset
-from src.depth_preprocessing import (
-    convert_depth_to_meters,
-    clean_depth_map,
-    normalize_depth_for_display,
-    get_depth_stats,
-)
-from src.point_cloud import (
-    create_point_cloud_from_rgbd,
-    get_point_cloud_stats,
-)
+from src.depth_preprocessing import (clean_depth_map, convert_depth_to_meters,
+                                     get_depth_stats,
+                                     normalize_depth_for_display)
 from src.floor_detection import detect_floor_plane_ransac
-from src.occupancy_grid import (
-    build_occupancy_grid,
-    inflate_obstacles,
-    compute_occupancy_metrics,
-)
-from src.visualization import (
-    plot_rgb_and_depth,
-    plot_point_cloud_projections,
-    plot_floor_segmentation_projections,
-)
-from src.occupancy_grid import save_occupancy_grid_visualization
+from src.occupancy_grid import (build_occupancy_grid,
+                                compute_occupancy_metrics, inflate_obstacles,
+                                save_occupancy_grid_visualization)
+from src.point_cloud import create_point_cloud_from_rgbd, get_point_cloud_stats
+from src.visualization import (plot_floor_segmentation_projections,
+                               plot_point_cloud_projections,
+                               plot_rgb_and_depth)
 
 
 def process_one_sample(dataset: NYU2KaggleDataset, index: int) -> dict:
@@ -154,12 +130,8 @@ def process_one_sample(dataset: NYU2KaggleDataset, index: int) -> dict:
             "traversability_total_cells": traversability_metrics["total_cells"],
             "traversability_known_cells": traversability_metrics["known_cells"],
             "traversability_unknown_ratio": traversability_metrics["unknown_ratio"],
-            "traversability_free_space_ratio_known": traversability_metrics[
-                "free_space_ratio_known"
-            ],
-            "traversability_obstacle_ratio_known": traversability_metrics[
-                "obstacle_ratio_known"
-            ],
+            "traversability_free_space_ratio_known": traversability_metrics["free_space_ratio_known"],
+            "traversability_obstacle_ratio_known": traversability_metrics["obstacle_ratio_known"],
         }
     )
 
@@ -321,24 +293,18 @@ def main() -> None:
 
     summary = {
         "samples_total": len(df),
-        "floor_found_count": int(df["floor_found"].sum()) if "floor_found" in df else 0,
-        "floor_found_ratio": float(df["floor_found"].mean()) if "floor_found" in df else 0.0,
-        "mean_processing_time_sec": float(df["processing_time_sec"].dropna().mean())
-        if "processing_time_sec" in df
-        else None,
-        "mean_floor_inlier_ratio": float(valid_df["floor_inlier_ratio"].mean())
-        if len(valid_df) > 0
-        else None,
-        "mean_occupancy_free_space_ratio_known": float(
-            valid_df["occupancy_free_space_ratio_known"].mean()
-        )
-        if len(valid_df) > 0
-        else None,
-        "mean_traversability_free_space_ratio_known": float(
-            valid_df["traversability_free_space_ratio_known"].mean()
-        )
-        if len(valid_df) > 0
-        else None,
+        "floor_found_count": (int(df["floor_found"].sum()) if "floor_found" in df else 0),
+        "floor_found_ratio": (float(df["floor_found"].mean()) if "floor_found" in df else 0.0),
+        "mean_processing_time_sec": (
+            float(df["processing_time_sec"].dropna().mean()) if "processing_time_sec" in df else None
+        ),
+        "mean_floor_inlier_ratio": (float(valid_df["floor_inlier_ratio"].mean()) if len(valid_df) > 0 else None),
+        "mean_occupancy_free_space_ratio_known": (
+            float(valid_df["occupancy_free_space_ratio_known"].mean()) if len(valid_df) > 0 else None
+        ),
+        "mean_traversability_free_space_ratio_known": (
+            float(valid_df["traversability_free_space_ratio_known"].mean()) if len(valid_df) > 0 else None
+        ),
     }
 
     summary_path = METRICS_DIR / f"summary_{split}_{max_samples}.csv"

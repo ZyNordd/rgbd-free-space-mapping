@@ -1,21 +1,9 @@
-from src.config import (
-    DATA_RAW_DIR,
-    DEPTH_SCALE,
-    MIN_DEPTH_M,
-    MAX_DEPTH_M,
-    FX,
-    FY,
-    CX,
-    CY,
-    DOWNSAMPLE_STEP,
-)
+from src.config import (CX, CY, DATA_RAW_DIR, DEPTH_SCALE, DOWNSAMPLE_STEP, FX,
+                        FY, MAX_DEPTH_M, MIN_DEPTH_M)
 from src.data_loading import NYU2KaggleDataset
-from src.depth_preprocessing import (
-    convert_depth_to_meters,
-    clean_depth_map,
-)
-from src.point_cloud import create_point_cloud_from_rgbd
+from src.depth_preprocessing import clean_depth_map, convert_depth_to_meters
 from src.floor_detection import detect_floor_plane_ransac
+from src.point_cloud import create_point_cloud_from_rgbd
 
 
 def process_sample(dataset: NYU2KaggleDataset, index: int) -> dict:

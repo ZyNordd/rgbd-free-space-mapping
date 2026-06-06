@@ -8,7 +8,6 @@ import numpy as np
 
 from src.floor_detection import compute_signed_distances_to_plane
 
-
 UNKNOWN = 0
 FREE = 1
 OCCUPIED = 2
@@ -86,12 +85,7 @@ def _points_to_grid_indices(
     cols = np.floor((x - x_min) / resolution).astype(np.int32)
     rows = np.floor((z - z_min) / resolution).astype(np.int32)
 
-    valid = (
-        (rows >= 0)
-        & (rows < grid_height)
-        & (cols >= 0)
-        & (cols < grid_width)
-    )
+    valid = (rows >= 0) & (rows < grid_height) & (cols >= 0) & (cols < grid_width)
 
     return rows[valid], cols[valid]
 

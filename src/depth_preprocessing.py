@@ -35,12 +35,7 @@ def clean_depth_map(
 
     cleaned = depth_m.astype(np.float32).copy()
 
-    invalid_mask = (
-        ~np.isfinite(cleaned)
-        | (cleaned <= 0)
-        | (cleaned < min_depth_m)
-        | (cleaned > max_depth_m)
-    )
+    invalid_mask = ~np.isfinite(cleaned) | (cleaned <= 0) | (cleaned < min_depth_m) | (cleaned > max_depth_m)
 
     cleaned[invalid_mask] = np.nan
 
@@ -52,12 +47,7 @@ def clean_depth_map(
         filtered = filtered_input
 
     # Remove invalid values again after filtering.
-    filtered[
-        (~np.isfinite(filtered))
-        | (filtered <= 0)
-        | (filtered < min_depth_m)
-        | (filtered > max_depth_m)
-    ] = np.nan
+    filtered[(~np.isfinite(filtered)) | (filtered <= 0) | (filtered < min_depth_m) | (filtered > max_depth_m)] = np.nan
 
     return filtered.astype(np.float32)
 

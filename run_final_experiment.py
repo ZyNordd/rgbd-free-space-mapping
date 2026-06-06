@@ -12,43 +12,18 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from src.config import (
-    DATA_RAW_DIR,
-    OUTPUTS_DIR,
-    DEPTH_SCALE,
-    MIN_DEPTH_M,
-    MAX_DEPTH_M,
-    FX,
-    FY,
-    CX,
-    CY,
-    DOWNSAMPLE_STEP,
-    GRID_RESOLUTION_M,
-    MIN_OBSTACLE_HEIGHT_M,
-    MAX_OBSTACLE_HEIGHT_M,
-    ROBOT_RADIUS_M,
-)
+from src.config import (CX, CY, DATA_RAW_DIR, DEPTH_SCALE, DOWNSAMPLE_STEP, FX,
+                        FY, GRID_RESOLUTION_M, MAX_DEPTH_M,
+                        MAX_OBSTACLE_HEIGHT_M, MIN_DEPTH_M,
+                        MIN_OBSTACLE_HEIGHT_M, OUTPUTS_DIR, ROBOT_RADIUS_M)
 from src.data_loading import NYU2KaggleDataset
-from src.depth_preprocessing import (
-    convert_depth_to_meters,
-    clean_depth_map,
-    normalize_depth_for_display,
-    get_depth_stats,
-)
-from src.point_cloud import (
-    create_point_cloud_from_rgbd,
-    get_point_cloud_stats,
-)
+from src.depth_preprocessing import (clean_depth_map, convert_depth_to_meters,
+                                     get_depth_stats,
+                                     normalize_depth_for_display)
 from src.floor_detection import detect_floor_plane_ransac
-from src.occupancy_grid import (
-    build_occupancy_grid,
-    inflate_obstacles,
-    compute_occupancy_metrics,
-    UNKNOWN,
-    FREE,
-    OCCUPIED,
-)
-
+from src.occupancy_grid import (FREE, OCCUPIED, UNKNOWN, build_occupancy_grid,
+                                compute_occupancy_metrics, inflate_obstacles)
+from src.point_cloud import create_point_cloud_from_rgbd, get_point_cloud_stats
 
 # =========================
 # Experiment settings
@@ -97,6 +72,7 @@ FINAL_COMBINED_DIR = FINAL_OUTPUT_DIR / "combined"
 # =========================
 # Utility functions
 # =========================
+
 
 def ensure_output_dirs() -> None:
     FINAL_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -494,6 +470,7 @@ def compute_candidate_score(row: pd.Series) -> float:
 # Main processing functions
 # =========================
 
+
 def process_one_sample(dataset: NYU2KaggleDataset, index: int) -> dict:
     start_time = time.perf_counter()
 
@@ -658,28 +635,16 @@ def process_one_sample(dataset: NYU2KaggleDataset, index: int) -> dict:
                 "occupancy_free_cells": occupancy_metrics["free_cells"],
                 "occupancy_occupied_cells": occupancy_metrics["occupied_cells"],
                 "occupancy_unknown_ratio": occupancy_metrics["unknown_ratio"],
-                "occupancy_free_space_ratio_known": occupancy_metrics[
-                    "free_space_ratio_known"
-                ],
-                "occupancy_obstacle_ratio_known": occupancy_metrics[
-                    "obstacle_ratio_known"
-                ],
+                "occupancy_free_space_ratio_known": occupancy_metrics["free_space_ratio_known"],
+                "occupancy_obstacle_ratio_known": occupancy_metrics["obstacle_ratio_known"],
                 "traversability_total_cells": traversability_metrics["total_cells"],
                 "traversability_known_cells": traversability_metrics["known_cells"],
                 "traversability_unknown_cells": traversability_metrics["unknown_cells"],
                 "traversability_free_cells": traversability_metrics["free_cells"],
-                "traversability_occupied_cells": traversability_metrics[
-                    "occupied_cells"
-                ],
-                "traversability_unknown_ratio": traversability_metrics[
-                    "unknown_ratio"
-                ],
-                "traversability_free_space_ratio_known": traversability_metrics[
-                    "free_space_ratio_known"
-                ],
-                "traversability_obstacle_ratio_known": traversability_metrics[
-                    "obstacle_ratio_known"
-                ],
+                "traversability_occupied_cells": traversability_metrics["occupied_cells"],
+                "traversability_unknown_ratio": traversability_metrics["unknown_ratio"],
+                "traversability_free_space_ratio_known": traversability_metrics["free_space_ratio_known"],
+                "traversability_obstacle_ratio_known": traversability_metrics["obstacle_ratio_known"],
             }
         )
 
@@ -827,36 +792,28 @@ def build_summary(df: pd.DataFrame, valid_df: pd.DataFrame) -> dict:
         "valid_candidate_ratio": len(valid_df) / total if total > 0 else 0.0,
         "mean_processing_time_sec_all": float(df["processing_time_sec"].dropna().mean()),
         "median_processing_time_sec_all": float(df["processing_time_sec"].dropna().median()),
-        "mean_floor_inlier_ratio_found": float(
-            df.loc[df["floor_found"] == True, "floor_inlier_ratio"].dropna().mean()
-        )
-        if floor_found_count > 0
-        else None,
-        "mean_floor_normal_y_abs_found": float(
-            df.loc[df["floor_found"] == True, "floor_normal_y_abs"].dropna().mean()
-        )
-        if floor_found_count > 0
-        else None,
-        "mean_occupancy_free_space_ratio_known_valid": float(
-            valid_df["occupancy_free_space_ratio_known"].dropna().mean()
-        )
-        if len(valid_df) > 0
-        else None,
-        "mean_occupancy_obstacle_ratio_known_valid": float(
-            valid_df["occupancy_obstacle_ratio_known"].dropna().mean()
-        )
-        if len(valid_df) > 0
-        else None,
-        "mean_traversability_free_space_ratio_known_valid": float(
-            valid_df["traversability_free_space_ratio_known"].dropna().mean()
-        )
-        if len(valid_df) > 0
-        else None,
-        "mean_traversability_obstacle_ratio_known_valid": float(
-            valid_df["traversability_obstacle_ratio_known"].dropna().mean()
-        )
-        if len(valid_df) > 0
-        else None,
+        "mean_floor_inlier_ratio_found": (
+            float(df.loc[df["floor_found"] == True, "floor_inlier_ratio"].dropna().mean())
+            if floor_found_count > 0
+            else None
+        ),
+        "mean_floor_normal_y_abs_found": (
+            float(df.loc[df["floor_found"] == True, "floor_normal_y_abs"].dropna().mean())
+            if floor_found_count > 0
+            else None
+        ),
+        "mean_occupancy_free_space_ratio_known_valid": (
+            float(valid_df["occupancy_free_space_ratio_known"].dropna().mean()) if len(valid_df) > 0 else None
+        ),
+        "mean_occupancy_obstacle_ratio_known_valid": (
+            float(valid_df["occupancy_obstacle_ratio_known"].dropna().mean()) if len(valid_df) > 0 else None
+        ),
+        "mean_traversability_free_space_ratio_known_valid": (
+            float(valid_df["traversability_free_space_ratio_known"].dropna().mean()) if len(valid_df) > 0 else None
+        ),
+        "mean_traversability_obstacle_ratio_known_valid": (
+            float(valid_df["traversability_obstacle_ratio_known"].dropna().mean()) if len(valid_df) > 0 else None
+        ),
         "grid_resolution_m": GRID_RESOLUTION_M,
         "min_obstacle_height_m": MIN_OBSTACLE_HEIGHT_M,
         "max_obstacle_height_m": MAX_OBSTACLE_HEIGHT_M,

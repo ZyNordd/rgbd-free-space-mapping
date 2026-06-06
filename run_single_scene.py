@@ -1,49 +1,22 @@
-from src.config import (
-    DATA_RAW_DIR,
-    FIGURES_DIR,
-    POINT_CLOUDS_DIR,
-    OCCUPANCY_MAPS_DIR,
-    DEPTH_SCALE,
-    MIN_DEPTH_M,
-    MAX_DEPTH_M,
-    FX,
-    FY,
-    CX,
-    CY,
-    DOWNSAMPLE_STEP,
-    GRID_RESOLUTION_M,
-    MIN_OBSTACLE_HEIGHT_M,
-    MAX_OBSTACLE_HEIGHT_M,
-    ROBOT_RADIUS_M,
-)
+from src.config import (CX, CY, DATA_RAW_DIR, DEPTH_SCALE, DOWNSAMPLE_STEP,
+                        FIGURES_DIR, FX, FY, GRID_RESOLUTION_M, MAX_DEPTH_M,
+                        MAX_OBSTACLE_HEIGHT_M, MIN_DEPTH_M,
+                        MIN_OBSTACLE_HEIGHT_M, OCCUPANCY_MAPS_DIR,
+                        POINT_CLOUDS_DIR, ROBOT_RADIUS_M)
 from src.data_loading import NYU2KaggleDataset
-from src.depth_preprocessing import (
-    convert_depth_to_meters,
-    clean_depth_map,
-    normalize_depth_for_display,
-    get_depth_stats,
-)
-from src.point_cloud import (
-    create_point_cloud_from_rgbd,
-    save_point_cloud_ply,
-    get_point_cloud_stats,
-)
-from src.visualization import (
-    plot_rgb_and_depth,
-    plot_point_cloud_projections,
-    plot_floor_segmentation_projections,
-)
-from src.floor_detection import (
-    detect_floor_plane_ransac,
-    print_plane_result,
-    print_plane_candidates,
-)
-from src.occupancy_grid import (
-    build_occupancy_grid,
-    inflate_obstacles,
-    compute_occupancy_metrics,
-    save_occupancy_grid_visualization,
-)
+from src.depth_preprocessing import (clean_depth_map, convert_depth_to_meters,
+                                     get_depth_stats,
+                                     normalize_depth_for_display)
+from src.floor_detection import (detect_floor_plane_ransac,
+                                 print_plane_candidates, print_plane_result)
+from src.occupancy_grid import (build_occupancy_grid,
+                                compute_occupancy_metrics, inflate_obstacles,
+                                save_occupancy_grid_visualization)
+from src.point_cloud import (create_point_cloud_from_rgbd,
+                             get_point_cloud_stats, save_point_cloud_ply)
+from src.visualization import (plot_floor_segmentation_projections,
+                               plot_point_cloud_projections,
+                               plot_rgb_and_depth)
 
 
 def main() -> None:
@@ -125,8 +98,7 @@ def main() -> None:
     )
 
     print(f"Saved point cloud projections to: {projections_save_path}")
-    
-    
+
     floor_result = detect_floor_plane_ransac(
         points=points,
         colors=colors,
@@ -147,9 +119,7 @@ def main() -> None:
     print_plane_result(floor_result)
 
     if floor_result is not None:
-        floor_segmentation_save_path = (
-            FIGURES_DIR / f"sample_{sample_index:05d}_floor_segmentation.png"
-        )
+        floor_segmentation_save_path = FIGURES_DIR / f"sample_{sample_index:05d}_floor_segmentation.png"
 
         plot_floor_segmentation_projections(
             floor_points=floor_result.floor_points,
@@ -170,9 +140,7 @@ def main() -> None:
         padding_m=0.20,
     )
 
-    occupancy_grid_save_path = (
-        OCCUPANCY_MAPS_DIR / f"sample_{sample_index:05d}_occupancy_grid.png"
-    )
+    occupancy_grid_save_path = OCCUPANCY_MAPS_DIR / f"sample_{sample_index:05d}_occupancy_grid.png"
 
     save_occupancy_grid_visualization(
         grid=occupancy_result.grid,
@@ -188,9 +156,7 @@ def main() -> None:
         resolution=GRID_RESOLUTION_M,
     )
 
-    traversability_grid_save_path = (
-        OCCUPANCY_MAPS_DIR / f"sample_{sample_index:05d}_traversability_grid.png"
-    )
+    traversability_grid_save_path = OCCUPANCY_MAPS_DIR / f"sample_{sample_index:05d}_traversability_grid.png"
 
     save_occupancy_grid_visualization(
         grid=inflated_grid,
@@ -212,6 +178,7 @@ def main() -> None:
 
     print("\nObstacle points:")
     print(f"obstacle_points: {occupancy_result.obstacle_points.shape[0]}")
+
 
 if __name__ == "__main__":
     main()

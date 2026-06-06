@@ -1,17 +1,9 @@
-from src.config import (
-    DATA_RAW_DIR,
-    FIGURES_DIR,
-    DEPTH_SCALE,
-    MIN_DEPTH_M,
-    MAX_DEPTH_M,
-)
+from src.config import (DATA_RAW_DIR, DEPTH_SCALE, FIGURES_DIR, MAX_DEPTH_M,
+                        MIN_DEPTH_M)
 from src.data_loading import NYU2KaggleDataset
-from src.depth_preprocessing import (
-    convert_depth_to_meters,
-    clean_depth_map,
-    normalize_depth_for_display,
-    get_depth_stats,
-)
+from src.depth_preprocessing import (clean_depth_map, convert_depth_to_meters,
+                                     get_depth_stats,
+                                     normalize_depth_for_display)
 from src.visualization import plot_rgb_and_depth
 
 
