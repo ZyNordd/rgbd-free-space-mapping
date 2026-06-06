@@ -1,0 +1,2 @@
+﻿samples_total,floor_found_count,floor_found_ratio,mean_processing_time_sec,mean_floor_inlier_ratio,mean_occupancy_free_space_ratio_known,mean_traversability_free_space_ratio_known
+100,81,0.81,0.07625097100011771,0.1591590595783133,0.30112616120705993,0.09174835031084339

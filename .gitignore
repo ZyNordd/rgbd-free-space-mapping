@@ -1,8 +1,57 @@
 # Byte-compiled / optimized / DLL files
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Raw dataset
+data/raw/
+data/processed/
+*.mat
+*.h5
+*.hdf5
+
+# Original image files from datasets
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.png
+
+# Heavy point clouds
+outputs/point_clouds/
+*.ply
+*.pcd
+
+# Generated figures with dataset RGB frames
+outputs/figures/
+outputs/final_experiment/figures/
+outputs/final_experiment/combined/
+
+# Optional: ignore all occupancy maps if too many
+# outputs/final_experiment/occupancy_maps/
+
+# Keep metrics
+!outputs/
+!outputs/final_experiment/
+!outputs/final_experiment/metrics/
+!outputs/final_experiment/metrics/*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
 __pycache__/
 *.py[codz]
 *$py.class
-
+data/raw/
 # C extensions
 *.so
 
