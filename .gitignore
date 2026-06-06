@@ -48,15 +48,6 @@ outputs/final_experiment/combined/
 .DS_Store
 Thumbs.db
 
-
-
-
-
-
-
-
-
-
 __pycache__/
 *.py[codz]
 *$py.class
